@@ -5,27 +5,67 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/Home';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const GameTabs = createBottomTabNavigator();
 const RootStack = createStackNavigator();
 
 export default function App() {
+  const [bgColor, setBgColor] = useState('#f3f4f6');
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState(null);
+
+  useEffect(() => {
+    async function loadData() {
+      console.log('start');
+      Promise.all([
+        setName(await AsyncStorage.getItem('nickname')),
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve('promise done');
+          }, 3000);
+        }),
+      ]).then(() => {
+        console.log('worked');
+        setLoading(true);
+      });
+    }
+
+    loadData();
+  }, []);
+
   function Game() {
     return (
       <GameTabs.Navigator
         screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}
       >
-        <GameTabs.Screen name='Home' component={Home} />
+        <GameTabs.Screen name='Home'>
+          {() => (
+            <Home
+              loadingState={loading}
+              nameState={name}
+              setNameState={setName}
+            />
+          )}
+        </GameTabs.Screen>
       </GameTabs.Navigator>
     );
   }
 
   return (
-    <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name='game' component={Game} />
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1, backgroundColor: bgColor }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <RootStack.Navigator screenOptions={{ headerShown: false }}>
+            <RootStack.Screen name='game' component={Game} />
+          </RootStack.Navigator>
+          <StatusBar style='auto' />
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 
   return (
