@@ -5,10 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <FlatList
         ListHeaderComponent={PageContent}
-        contentContainerStyle={{ minHeight: '100%' }}
+        contentContainerStyle={{ flex: 1 }}
         ListHeaderComponentStyle={{ flex: 1 }}
       />
     </SafeAreaView>
@@ -33,20 +33,20 @@ function PageContent() {
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'9'}
-          color="green"
+          color='green'
         />
         <Button
           containerStyle={{ flex: 1, paddingHorizontal: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'Inglês'}
-          color="cornflowerblue"
+          color='cornflowerblue'
         />
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'L'}
-          color="green"
+          color='green'
         />
       </View>
       <View
@@ -60,20 +60,20 @@ function PageContent() {
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'9'}
-          color="green"
+          color='green'
         />
         <Button
           containerStyle={{ flex: 1, paddingHorizontal: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'HTML'}
-          color="cornflowerblue"
+          color='cornflowerblue'
         />
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'L'}
-          color="green"
+          color='green'
         />
       </View>
       <View
@@ -87,20 +87,20 @@ function PageContent() {
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'9'}
-          color="green"
+          color='green'
         />
         <Button
           containerStyle={{ flex: 1, paddingHorizontal: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'CSS'}
-          color="cornflowerblue"
+          color='cornflowerblue'
         />
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'L'}
-          color="green"
+          color='green'
         />
       </View>
       <View
@@ -114,20 +114,20 @@ function PageContent() {
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'9'}
-          color="green"
+          color='green'
         />
         <Button
           containerStyle={{ flex: 1, paddingHorizontal: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'JavaScript'}
-          color="cornflowerblue"
+          color='cornflowerblue'
         />
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'L'}
-          color="green"
+          color='green'
         />
       </View>
       <View
@@ -141,20 +141,20 @@ function PageContent() {
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'9'}
-          color="green"
+          color='green'
         />
         <Button
           containerStyle={{ flex: 1, paddingHorizontal: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'Programação'}
-          color="cornflowerblue"
+          color='cornflowerblue'
         />
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
           title={'L'}
-          color="green"
+          color='green'
         />
       </View>
       <View style={{ paddingHorizontal: 24, paddingBottom: 48 }}>
@@ -162,14 +162,14 @@ function PageContent() {
           containerStyle={{ paddingBottom: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title="START"
-          color="indigo"
+          title='START'
+          color='indigo'
         />
         <Button
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title="STATS"
-          color="blueviolet"
+          title='STATS'
+          color='blueviolet'
         />
       </View>
     </View>
