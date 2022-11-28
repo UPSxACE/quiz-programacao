@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Input } from '@rneui/base';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
@@ -9,7 +10,7 @@ import { defaultConfig } from '../Config';
 
 const categoryList = Object.keys(defaultConfig);
 
-export default function Home({ loadingState, nameState, setNameState }) {
+export default function HomeScreen({ loadingState, nameState, setNameState }) {
   const [inputValue, setInputValue] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [data, setData] = useState({});
@@ -129,6 +130,8 @@ export default function Home({ loadingState, nameState, setNameState }) {
 }
 
 function PageContent({ nameState, data, setData }) {
+  const navigation = useNavigation();
+
   function Item({ item }) {
     const [on, setOn] = useState(data[item].on);
     const [amountQuestions, setAmountQuestions] = useState(
@@ -213,14 +216,21 @@ function PageContent({ nameState, data, setData }) {
           containerStyle={{ paddingBottom: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title='START'
-          color='indigo'
+          title="START"
+          color="indigo"
+          onPress={() => {
+            AsyncStorage.setItem('data', JSON.stringify(data));
+            navigation.navigate('GameTabs', {
+              screen: 'Game',
+              params: { data },
+            });
+          }}
         />
         <Button
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title='STATS'
-          color='blueviolet'
+          title="STATS"
+          color="blueviolet"
         />
       </View>
     </View>

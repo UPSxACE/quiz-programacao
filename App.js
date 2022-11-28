@@ -4,12 +4,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Home from './screens/Home';
+import HomeScreen from './screens/HomeScreen';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native';
+import GameScreen from './screens/GameScreen';
 
 const GameTabs = createBottomTabNavigator();
 const RootStack = createStackNavigator();
@@ -41,14 +42,18 @@ export default function App() {
       <GameTabs.Navigator
         screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}
       >
-        <GameTabs.Screen name='Home'>
-          {() => (
-            <Home
+        <GameTabs.Screen name="Home">
+          {(props) => (
+            <HomeScreen
               loadingState={loading}
               nameState={name}
               setNameState={setName}
+              {...props}
             />
           )}
+        </GameTabs.Screen>
+        <GameTabs.Screen name="Game">
+          {(props) => <GameScreen {...props} />}
         </GameTabs.Screen>
       </GameTabs.Navigator>
     );
@@ -60,9 +65,9 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
             <RootStack.Navigator screenOptions={{ headerShown: false }}>
-              <RootStack.Screen name='game' component={Game} />
+              <RootStack.Screen name="GameTabs" component={Game} />
             </RootStack.Navigator>
-            <StatusBar style='auto' />
+            <StatusBar style="auto" />
           </NavigationContainer>
         </GestureHandlerRootView>
       </SafeAreaView>
@@ -86,7 +91,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style='auto' />
+      <StatusBar style="auto" />
     </View>
   );
 }
