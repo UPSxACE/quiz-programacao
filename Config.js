@@ -1,7 +1,7 @@
 export const defaultConfig = {
-  Inglês: { amountQuestions: 0, on: true },
-  HTML: { amountQuestions: 0, on: true },
-  CSS: { amountQuestions: 0, on: true },
-  JavaScript: { amountQuestions: 0, on: true },
-  Programação: { amountQuestions: 0, on: true },
+  Inglês: { amountQuestions: 9, on: true },
+  HTML: { amountQuestions: 6, on: true },
+  CSS: { amountQuestions: 9, on: true },
+  JavaScript: { amountQuestions: 3, on: true },
+  Programação: { amountQuestions: 9, on: true },
 };

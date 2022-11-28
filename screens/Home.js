@@ -118,7 +118,9 @@ export default function Home({ loadingState, nameState, setNameState }) {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        ListHeaderComponent={<PageContent nameState={nameState} data={data} />}
+        ListHeaderComponent={
+          <PageContent nameState={nameState} data={data} setData={setData} />
+        }
         contentContainerStyle={{ flex: 1 }}
         ListHeaderComponentStyle={{ flex: 1 }}
       />
@@ -126,39 +128,54 @@ export default function Home({ loadingState, nameState, setNameState }) {
   );
 }
 
-function renderItem({ item }) {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        paddingHorizontal: 24,
-        paddingBottom: 12,
-      }}
-    >
-      <Button
-        buttonStyle={{ width: 48, height: 48 }}
-        titleStyle={{ fontSize: 20 }}
-        title={'9'}
-        color={defaultConfig[item].on ? 'green' : 'red'}
-      />
-      <Button
-        containerStyle={{ flex: 1, paddingHorizontal: 8 }}
-        buttonStyle={{ height: 48 }}
-        titleStyle={{ fontSize: 20 }}
-        title={item}
-        color='cornflowerblue'
-      />
-      <Button
-        buttonStyle={{ width: 48, height: 48 }}
-        titleStyle={{ fontSize: 20 }}
-        title={'L'}
-        color={defaultConfig[item].on ? 'green' : 'red'}
-      />
-    </View>
-  );
-}
+function PageContent({ nameState, data, setData }) {
+  function Item({ item }) {
+    const [on, setOn] = useState(data[item].on);
+    const [amountQuestions, setAmountQuestions] = useState(
+      data[item].amountQuestions
+    );
 
-function PageContent({ nameState, data }) {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingHorizontal: 24,
+          paddingBottom: 12,
+        }}
+      >
+        <Button
+          buttonStyle={{ width: 48, height: 48 }}
+          titleStyle={{ fontSize: 20 }}
+          title={on ? String(amountQuestions) : '0'}
+          color={on ? 'green' : 'grey'}
+        />
+        <Button
+          containerStyle={{ flex: 1, paddingHorizontal: 8 }}
+          buttonStyle={{ height: 48 }}
+          titleStyle={{ fontSize: 20 }}
+          title={item}
+          color={on ? 'cornflowerblue' : 'grey'}
+        />
+        <Button
+          buttonStyle={{ width: 48, height: 48 }}
+          titleStyle={{ fontSize: 20 }}
+          title={'L'}
+          color={on ? 'green' : 'red'}
+          onPress={() => {
+            const newData = data;
+            newData[item].on = !newData[item].on;
+            setOn(!on);
+            setData(newData);
+          }}
+        />
+      </View>
+    );
+  }
+
+  function renderItem({ item }) {
+    return <Item item={item} />;
+  }
+
   return (
     <View style={{ justifyContent: 'center', flex: 1 }}>
       <View style={{ padding: 48 }}>
