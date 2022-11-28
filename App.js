@@ -9,18 +9,18 @@ import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ActivityIndicator } from 'react-native';
 
 const GameTabs = createBottomTabNavigator();
 const RootStack = createStackNavigator();
 
 export default function App() {
   const [bgColor, setBgColor] = useState('#f3f4f6');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [name, setName] = useState(null);
 
   useEffect(() => {
     async function loadData() {
-      console.log('start');
       Promise.all([
         setName(await AsyncStorage.getItem('nickname')),
         new Promise((resolve) => {
@@ -29,8 +29,7 @@ export default function App() {
           }, 3000);
         }),
       ]).then(() => {
-        console.log('worked');
-        setLoading(true);
+        setLoading(false);
       });
     }
 
@@ -56,16 +55,32 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: bgColor }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>
-          <RootStack.Navigator screenOptions={{ headerShown: false }}>
-            <RootStack.Screen name='game' component={Game} />
-          </RootStack.Navigator>
-          <StatusBar style='auto' />
-        </NavigationContainer>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={{ flex: 1, backgroundColor: bgColor }}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NavigationContainer>
+            <RootStack.Navigator screenOptions={{ headerShown: false }}>
+              <RootStack.Screen name='game' component={Game} />
+            </RootStack.Navigator>
+            <StatusBar style='auto' />
+          </NavigationContainer>
+        </GestureHandlerRootView>
+      </SafeAreaView>
+      {loading && (
+        <View
+          style={{
+            position: 'absolute',
+            zIndex: 99,
+            height: '100%',
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size={100} color={'black'} />
+        </View>
+      )}
+    </>
   );
 
   return (

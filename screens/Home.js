@@ -5,11 +5,50 @@ import { ActivityIndicator } from 'react-native';
 import { FlatList } from 'react-native';
 import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { defaultConfig } from '../Config';
 
 export default function Home({ loadingState, nameState, setNameState }) {
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [data, setData] = useState({});
 
-  if (!loadingState) {
+  useEffect(() => {
+    async function loadData() {
+      let finalData = JSON.parse(await AsyncStorage.getItem('data'));
+      if (!finalData || Object.keys(finalData).length === 0) {
+        finalData = {
+          points: 0,
+          config: defaultConfig,
+          stats: [],
+        };
+      }
+      if (!finalData.points) {
+        finalData.points = 0;
+      }
+      if (!finalData.config) {
+        finalData.config = {};
+      }
+
+      //verify if the current data has all the default categories inside it
+      const defaultKeys = Object.keys(defaultConfig);
+      defaultKeys.forEach((key) => {
+        if (!finalData[key]) {
+          finalData[key] = defaultConfig[key];
+        }
+      });
+
+      if (!finalData.stats) {
+        finalData.stats = [];
+      }
+      setData(finalData);
+      setDataLoaded(true);
+    }
+    loadData();
+  }, []);
+
+  if (loadingState || !dataLoaded) {
+    return <></>;
+
     return (
       <View
         style={{
@@ -77,7 +116,7 @@ export default function Home({ loadingState, nameState, setNameState }) {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        ListHeaderComponent={<PageContent nameState={nameState} />}
+        ListHeaderComponent={<PageContent nameState={nameState} data={data} />}
         contentContainerStyle={{ flex: 1 }}
         ListHeaderComponentStyle={{ flex: 1 }}
       />
@@ -85,12 +124,14 @@ export default function Home({ loadingState, nameState, setNameState }) {
   );
 }
 
-function PageContent({ nameState }) {
+function PageContent({ nameState, data }) {
   return (
     <View style={{ justifyContent: 'center', flex: 1 }}>
       <View style={{ padding: 48 }}>
         <Text style={{ textAlign: 'center', fontSize: 24 }}>{nameState}</Text>
-        <Text style={{ textAlign: 'center', fontSize: 24 }}>Pontos: 0</Text>
+        <Text style={{ textAlign: 'center', fontSize: 24 }}>
+          Pontos: {data.points}
+        </Text>
       </View>
       <View
         style={{
