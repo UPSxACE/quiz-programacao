@@ -146,8 +146,25 @@ function PageContent({ nameState, data, setData }) {
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title={on ? String(amountQuestions) : '0'}
-          color={on ? 'green' : 'grey'}
+          title={on ? String((amountQuestions + 1) * 3) : '0'}
+          color={
+            on
+              ? amountQuestions == 2
+                ? 'darkgreen'
+                : amountQuestions == 1
+                ? 'limegreen'
+                : '#6fa86f'
+              : 'grey'
+          }
+          onPress={() => {
+            if (on) {
+              const newData = data;
+              newData[item].amountQuestions =
+                (newData[item].amountQuestions + 1) % 3;
+              setAmountQuestions(newData[item].amountQuestions);
+              setData(newData);
+            }
+          }}
         />
         <Button
           containerStyle={{ flex: 1, paddingHorizontal: 8 }}
@@ -159,7 +176,7 @@ function PageContent({ nameState, data, setData }) {
         <Button
           buttonStyle={{ width: 48, height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title={'L'}
+          title={on ? 'L' : 'D'}
           color={on ? 'green' : 'red'}
           onPress={() => {
             const newData = data;
