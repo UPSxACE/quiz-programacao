@@ -7,6 +7,8 @@ import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { defaultConfig } from '../Config';
 
+const categoryList = Object.keys(defaultConfig);
+
 export default function Home({ loadingState, nameState, setNameState }) {
   const [inputValue, setInputValue] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -124,6 +126,38 @@ export default function Home({ loadingState, nameState, setNameState }) {
   );
 }
 
+function renderItem({ item }) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 24,
+        paddingBottom: 12,
+      }}
+    >
+      <Button
+        buttonStyle={{ width: 48, height: 48 }}
+        titleStyle={{ fontSize: 20 }}
+        title={'9'}
+        color={defaultConfig[item].on ? 'green' : 'red'}
+      />
+      <Button
+        containerStyle={{ flex: 1, paddingHorizontal: 8 }}
+        buttonStyle={{ height: 48 }}
+        titleStyle={{ fontSize: 20 }}
+        title={item}
+        color='cornflowerblue'
+      />
+      <Button
+        buttonStyle={{ width: 48, height: 48 }}
+        titleStyle={{ fontSize: 20 }}
+        title={'L'}
+        color={defaultConfig[item].on ? 'green' : 'red'}
+      />
+    </View>
+  );
+}
+
 function PageContent({ nameState, data }) {
   return (
     <View style={{ justifyContent: 'center', flex: 1 }}>
@@ -133,142 +167,14 @@ function PageContent({ nameState, data }) {
           Pontos: {data.points}
         </Text>
       </View>
+      <FlatList
+        renderItem={renderItem}
+        data={categoryList}
+        keyExtractor={(item, index) => index}
+      />
       <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 24,
-          paddingBottom: 12,
-        }}
+        style={{ paddingHorizontal: 24, paddingBottom: 48, paddingTop: 36 }}
       >
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'9'}
-          color='green'
-        />
-        <Button
-          containerStyle={{ flex: 1, paddingHorizontal: 8 }}
-          buttonStyle={{ height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'Inglês'}
-          color='cornflowerblue'
-        />
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'L'}
-          color='green'
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 24,
-          paddingBottom: 12,
-        }}
-      >
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'9'}
-          color='green'
-        />
-        <Button
-          containerStyle={{ flex: 1, paddingHorizontal: 8 }}
-          buttonStyle={{ height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'HTML'}
-          color='cornflowerblue'
-        />
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'L'}
-          color='green'
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 24,
-          paddingBottom: 12,
-        }}
-      >
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'9'}
-          color='green'
-        />
-        <Button
-          containerStyle={{ flex: 1, paddingHorizontal: 8 }}
-          buttonStyle={{ height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'CSS'}
-          color='cornflowerblue'
-        />
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'L'}
-          color='green'
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 24,
-          paddingBottom: 12,
-        }}
-      >
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'9'}
-          color='green'
-        />
-        <Button
-          containerStyle={{ flex: 1, paddingHorizontal: 8 }}
-          buttonStyle={{ height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'JavaScript'}
-          color='cornflowerblue'
-        />
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'L'}
-          color='green'
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 24,
-          paddingBottom: 48,
-        }}
-      >
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'9'}
-          color='green'
-        />
-        <Button
-          containerStyle={{ flex: 1, paddingHorizontal: 8 }}
-          buttonStyle={{ height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'Programação'}
-          color='cornflowerblue'
-        />
-        <Button
-          buttonStyle={{ width: 48, height: 48 }}
-          titleStyle={{ fontSize: 20 }}
-          title={'L'}
-          color='green'
-        />
-      </View>
-      <View style={{ paddingHorizontal: 24, paddingBottom: 48 }}>
         <Button
           containerStyle={{ paddingBottom: 8 }}
           buttonStyle={{ height: 48 }}
