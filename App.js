@@ -40,7 +40,11 @@ export default function App() {
   function Game() {
     return (
       <GameTabs.Navigator
-        screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: { display: 'none' },
+          unmountOnBlur: true,
+        }}
       >
         <GameTabs.Screen name='Home'>
           {(props) => (
@@ -52,7 +56,7 @@ export default function App() {
             />
           )}
         </GameTabs.Screen>
-        <GameTabs.Screen name='Game' options={{ unmountOnBlur: true }}>
+        <GameTabs.Screen name='Game'>
           {(props) => <GameScreen {...props} />}
         </GameTabs.Screen>
       </GameTabs.Navigator>

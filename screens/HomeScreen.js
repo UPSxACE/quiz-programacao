@@ -10,7 +10,12 @@ import { defaultConfig } from '../Config';
 
 const categoryList = Object.keys(defaultConfig);
 
-export default function HomeScreen({ loadingState, nameState, setNameState }) {
+export default function HomeScreen({
+  route,
+  loadingState,
+  nameState,
+  setNameState,
+}) {
   const [inputValue, setInputValue] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [data, setData] = useState({});
@@ -216,8 +221,8 @@ function PageContent({ nameState, data, setData }) {
           containerStyle={{ paddingBottom: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title="START"
-          color="indigo"
+          title='START'
+          color='indigo'
           onPress={() => {
             AsyncStorage.setItem('data', JSON.stringify(data));
             navigation.navigate('GameTabs', {
@@ -229,8 +234,8 @@ function PageContent({ nameState, data, setData }) {
         <Button
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title="STATS"
-          color="blueviolet"
+          title='STATS'
+          color='blueviolet'
         />
       </View>
     </View>

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getActionFromState } from '@react-navigation/native';
 import { Button } from '@rneui/base';
 import { useReducer } from 'react';
@@ -98,7 +99,7 @@ function reducer(state, action) {
   }
 }
 
-export default function GameScreen({ route, navigation }) {
+export default function GameScreen({ route, navigation, setData }) {
   const questions_data = [
     {
       categoryName: 'Inglês',
@@ -169,8 +170,18 @@ export default function GameScreen({ route, navigation }) {
           containerStyle={{ width: 240 }}
           title={'FIM'}
           color={'indigo'}
-          onPress={() => {
-            navigation.navigate('GameTabs', { screen: 'Home' });
+          onPress={async () => {
+            const data = JSON.parse(await AsyncStorage.getItem('data'));
+            await AsyncStorage.setItem(
+              'data',
+              JSON.stringify({
+                ...data,
+                points: data.points + gameState.points,
+              })
+            );
+            navigation.navigate('GameTabs', {
+              screen: 'Home',
+            });
           }}
         />
       </View>
