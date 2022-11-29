@@ -20,6 +20,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 const initGame = (questions_obj) => {
   return {
+    gameOver: false,
     newCategory: true,
     answered: false,
     amountOfCategories: questions_obj.length,
@@ -54,17 +55,86 @@ function reducer(state, action) {
         points: new_points,
       };
     case 'next':
-      return { ...state, newCategory: true, answered: false };
+      let newCurrentCategory = state.currentCategory;
+      let newNewCategory = false;
+      // will be 0 if current question + 1 returns same number as amount of questions
+      let newCurrentQuestion =
+        (state.currentQuestion + 1) % state.amountOfQuestions;
+
+      console.log('AAAAAAAAAAA');
+
+      if (newCurrentQuestion === 0) {
+        newCurrentCategory = state.currentCategory + 1;
+      }
+      if (!(newCurrentCategory < state.amountOfCategories)) {
+        return { ...state, answered: false, gameOver: true };
+      }
+      if (
+        newCurrentQuestion === 0 &&
+        newCurrentCategory < state.amountOfCategories
+      ) {
+        newNewCategory = true;
+      }
+
+      return {
+        ...state,
+        newCategory: newNewCategory,
+        answered: false,
+        answer: null,
+        categoryName: state.questions_data[newCurrentCategory].categoryName,
+        currentCategory: newCurrentCategory,
+        currentQuestion: newCurrentQuestion,
+        question:
+          state.questions_data[newCurrentCategory].questions[newCurrentQuestion]
+            .question,
+        correct_answer:
+          state.questions_data[newCurrentCategory].questions[newCurrentQuestion]
+            .correctAnswer,
+        randomizedPossibilites: shuffle(
+          state.questions_data[newCurrentCategory].questions[newCurrentQuestion]
+            .possibilities
+        ),
+      };
   }
 }
 
-export default function GameScreen({ route }) {
+export default function GameScreen({ route, navigation }) {
   const questions_data = [
     {
       categoryName: 'Inglês',
       questions: [
         {
-          question: 'Example of question?',
+          question: 'Example of question 1?',
+          possibilities: ['a', 'b', 'c', 'd'],
+          correctAnswer: 'c',
+        },
+        {
+          question: 'Example of question 2?',
+          possibilities: ['a', 'b', 'c', 'd'],
+          correctAnswer: 'c',
+        },
+        {
+          question: 'Example of question 3?',
+          possibilities: ['a', 'b', 'c', 'd'],
+          correctAnswer: 'c',
+        },
+      ],
+    },
+    {
+      categoryName: 'HTML',
+      questions: [
+        {
+          question: 'Example of question 4?',
+          possibilities: ['a', 'b', 'c', 'd'],
+          correctAnswer: 'c',
+        },
+        {
+          question: 'Example of question 5?',
+          possibilities: ['a', 'b', 'c', 'd'],
+          correctAnswer: 'c',
+        },
+        {
+          question: 'Example of question 6?',
           possibilities: ['a', 'b', 'c', 'd'],
           correctAnswer: 'c',
         },
@@ -81,6 +151,31 @@ export default function GameScreen({ route }) {
 
   console.log('gamestate: ');
   console.log(gameState);
+
+  if (gameState.gameOver) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Game Over</Text>
+        <Text style={{ fontSize: 24, paddingBottom: 16 }}>
+          Pontos: {gameState.points}
+        </Text>
+        <Button
+          containerStyle={{ width: 240 }}
+          title={'FIM'}
+          color={'indigo'}
+          onPress={() => {
+            navigation.navigate('GameTabs', { screen: 'Home' });
+          }}
+        />
+      </View>
+    );
+  }
 
   if (gameState.newCategory) {
     return (
@@ -107,23 +202,44 @@ export default function GameScreen({ route }) {
 
   console.log(gameState);
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text style={{ fontSize: 28 }}>Pontos: {gameState.points}</Text>
-      <Text style={{ fontSize: 28, paddingBottom: 16 }}>
-        {gameState.question}
-      </Text>
-      <FlatList
-        style={{ flexGrow: 0, width: '100%' }}
-        data={gameState.randomizedPossibilites}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index}
-      />
+    <View style={{ flex: 1 }}>
+      <View
+        style={{ flexDirection: 'row', paddingHorizontal: 24, paddingTop: 8 }}
+      >
+        <Text style={{ fontSize: 20 }}>{gameState.categoryName}</Text>
+        <Text style={{ fontSize: 20, marginLeft: 'auto' }}>
+          Pontos: {gameState.points}
+        </Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: 16,
+        }}
+      >
+        <Text style={{ fontSize: 28, paddingBottom: 16 }}>
+          {gameState.question}
+        </Text>
+        <FlatList
+          style={{ flexGrow: 0, width: '100%' }}
+          data={gameState.randomizedPossibilites}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+      <View style={{ paddingHorizontal: 24, paddingBottom: 16, height: 56 }}>
+        {gameState.answered && (
+          <Button
+            title='PRÓXIMO'
+            color='indigo'
+            onPress={() => {
+              dispatchGameState({ type: 'next' });
+            }}
+          ></Button>
+        )}
+      </View>
     </View>
   );
 

@@ -42,7 +42,7 @@ export default function App() {
       <GameTabs.Navigator
         screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}
       >
-        <GameTabs.Screen name="Home">
+        <GameTabs.Screen name='Home'>
           {(props) => (
             <HomeScreen
               loadingState={loading}
@@ -52,7 +52,7 @@ export default function App() {
             />
           )}
         </GameTabs.Screen>
-        <GameTabs.Screen name="Game">
+        <GameTabs.Screen name='Game' options={{ unmountOnBlur: true }}>
           {(props) => <GameScreen {...props} />}
         </GameTabs.Screen>
       </GameTabs.Navigator>
@@ -65,9 +65,9 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
             <RootStack.Navigator screenOptions={{ headerShown: false }}>
-              <RootStack.Screen name="GameTabs" component={Game} />
+              <RootStack.Screen name='GameTabs' component={Game} />
             </RootStack.Navigator>
-            <StatusBar style="auto" />
+            <StatusBar style='auto' />
           </NavigationContainer>
         </GestureHandlerRootView>
       </SafeAreaView>
@@ -91,7 +91,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
     </View>
   );
 }
