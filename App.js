@@ -11,12 +11,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native';
 import GameScreen from './screens/GameScreen';
+import StatScreen from './screens/StatScreen';
 
 const GameTabs = createBottomTabNavigator();
 const RootStack = createStackNavigator();
 
 export default function App() {
-  const [bgColor, setBgColor] = useState('#f3f4f6');
+  const [bgColor, setBgColor] = useState('#f2f2f2');
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState(null);
 
@@ -70,7 +71,9 @@ export default function App() {
           <NavigationContainer>
             <RootStack.Navigator screenOptions={{ headerShown: false }}>
               <RootStack.Screen name="GameTabs" component={Game} />
+              <RootStack.Screen name="Stats" component={StatScreen} />
             </RootStack.Navigator>
+
             <StatusBar style="auto" />
           </NavigationContainer>
         </GestureHandlerRootView>

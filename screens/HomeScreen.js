@@ -281,6 +281,10 @@ function PageContent({
           titleStyle={{ fontSize: 20 }}
           title="STATS"
           color="blueviolet"
+          onPress={() => {
+            AsyncStorage.setItem('data', JSON.stringify(data));
+            navigation.navigate('Stats');
+          }}
         />
       </View>
     </View>
