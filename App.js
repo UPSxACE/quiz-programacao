@@ -69,9 +69,31 @@ export default function App() {
       <SafeAreaView style={{ flex: 1, backgroundColor: bgColor }}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
-            <RootStack.Navigator screenOptions={{ headerShown: false }}>
+            <RootStack.Navigator
+              screenOptions={{ headerShown: false, animationEnabled: false }}
+            >
               <RootStack.Screen name="GameTabs" component={Game} />
-              <RootStack.Screen name="Stats" component={StatScreen} />
+              <RootStack.Screen
+                options={{
+                  animationEnabled: true,
+                  transitionSpec: {
+                    open: {
+                      animation: 'timing',
+                      config: {
+                        duration: 250,
+                      },
+                    },
+                    close: {
+                      animation: 'timing',
+                      config: {
+                        duration: 250,
+                      },
+                    },
+                  },
+                }}
+                name="Stats"
+                component={StatScreen}
+              />
             </RootStack.Navigator>
 
             <StatusBar style="auto" />

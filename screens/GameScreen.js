@@ -100,7 +100,7 @@ function reducer(state, action) {
 
 export default function GameScreen({ route, navigation, setData }) {
   const data = route.params.data;
-  const questions_data = pickQuestions(data);
+  const questions_data = pickQuestions(data.config);
   const [gameState, dispatchGameState] = useReducer(
     reducer,
     questions_data,

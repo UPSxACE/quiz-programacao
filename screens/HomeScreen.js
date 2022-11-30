@@ -42,8 +42,8 @@ export default function HomeScreen({
       //verify if the current data has all the default categories inside it
       const defaultKeys = Object.keys(defaultConfig);
       defaultKeys.forEach((key) => {
-        if (!finalData[key]) {
-          finalData[key] = defaultConfig[key];
+        if (!finalData.config[key]) {
+          finalData.config[key] = defaultConfig[key];
         }
       });
 
@@ -57,6 +57,7 @@ export default function HomeScreen({
   }, []);
 
   if (loadingState || !dataLoaded) {
+    // this is causing white screen issues
     return <></>;
 
     return (
@@ -154,13 +155,13 @@ function PageContent({
   const navigation = useNavigation();
 
   function Item({ item }) {
-    const [on, setOn] = useState(data[item].on);
+    const [on, setOn] = useState(data.config[item].on);
     const [amountQuestions, setAmountQuestions] = useState(
-      data[item].amountQuestions
+      data.config[item].amountQuestions
     );
 
     useEffect(() => {
-      if (data[item].on) {
+      if (data.config[item].on) {
         onCounter.push(item);
         if (dataOnOffValidator === false) {
           setdataOnOffValidator(true);
@@ -192,9 +193,9 @@ function PageContent({
           onPress={() => {
             if (on) {
               const newData = data;
-              newData[item].amountQuestions =
-                (newData[item].amountQuestions + 1) % 3;
-              setAmountQuestions(newData[item].amountQuestions);
+              newData.config[item].amountQuestions =
+                (newData.config[item].amountQuestions + 1) % 3;
+              setAmountQuestions(newData.config[item].amountQuestions);
               setData(newData);
             }
           }}
@@ -228,7 +229,7 @@ function PageContent({
 
             // toggle on/off
             const newData = data;
-            newData[item].on = !newData[item].on;
+            newData.config[item].on = !newData.config[item].on;
             setOn(!on);
             setData(newData);
           }}
