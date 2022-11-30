@@ -24,7 +24,6 @@ const initGame = (questions_obj) => {
   const empty_category_hitmiss_obj = {};
   questions_obj.forEach((category) => {
     empty_category_hitmiss_obj[category.categoryName] = [];
-    console.log(empty_category_hitmiss_obj);
   });
 
   return {
@@ -57,8 +56,6 @@ function reducer(state, action) {
     case 'category-confirm':
       return { ...state, newCategory: false };
     case 'answer':
-      console.log('answer here: ');
-      console.log(state.hit_miss_counter);
       const newHitMissCounter = state.hit_miss_counter;
       let new_points = state.points;
       if (action.user_answer == state.correct_answer) {
@@ -67,15 +64,11 @@ function reducer(state, action) {
           ...newHitMissCounter.hits[state.categoryName],
           state.currentQuestionId,
         ];
-        console.log('answer here2: ');
-        console.log(newHitMissCounter);
       } else {
         newHitMissCounter.misses[state.categoryName] = [
           ...newHitMissCounter.misses[state.categoryName],
           state.currentQuestionId,
         ];
-        console.log('answer here3: ');
-        console.log(newHitMissCounter);
       }
       return {
         ...state,
@@ -158,9 +151,6 @@ export default function GameScreen({ route, navigation, setData }) {
           onPress={async () => {
             const data = JSON.parse(await AsyncStorage.getItem('data'));
             const newQuestionStatsData = data.stats.questions;
-            console.log('AQUI: ');
-            console.log(newQuestionStatsData);
-            console.log(gameState.hit_miss_counter);
             Object.keys(gameState.hit_miss_counter.hits).forEach(
               (question_category) => {
                 gameState.hit_miss_counter.hits[question_category].forEach(

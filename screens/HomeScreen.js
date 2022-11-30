@@ -296,7 +296,7 @@ function PageContent({
           color="blueviolet"
           onPress={() => {
             AsyncStorage.setItem('data', JSON.stringify(data));
-            navigation.navigate('Stats');
+            navigation.navigate('Stats', { stats_data: data.stats });
           }}
         />
       </View>
