@@ -29,7 +29,7 @@ export default function HomeScreen({
         finalData = {
           points: 0,
           config: defaultConfig,
-          stats: [],
+          stats: { questions: { hits: {}, misses: {} } },
         };
       }
       if (!finalData.points) {
@@ -47,9 +47,21 @@ export default function HomeScreen({
         }
       });
 
+      //verify if stats is correctly structured
       if (!finalData.stats) {
-        finalData.stats = [];
+        finalData.stats = { questions: { hits: {}, misses: {} } };
       }
+      if (!finalData.stats.questions) {
+        finalData.stats.questions = { hits: {}, misses: {} };
+      }
+      if (!finalData.stats.questions.hits) {
+        finalData.stats.questions.hits = {};
+      }
+      if (!finalData.stats.questions.misses) {
+        finalData.stats.questions.hits = {};
+      }
+
+      //Save data
       setData(finalData);
       setDataLoaded(true);
     }

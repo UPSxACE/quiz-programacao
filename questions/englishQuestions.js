@@ -128,7 +128,7 @@ const englishQuestions = [
   {
     id: 18,
     question: 'A tradução de "background color" é:',
-    possibilities: ['divisão', 'fronteira', 'divisão', 'côr de fundo'],
+    possibilities: ['divisão', 'fronteira', 'divisão', 'cor de fundo'],
     correctAnswer: 'cor de fundo',
   },
   {

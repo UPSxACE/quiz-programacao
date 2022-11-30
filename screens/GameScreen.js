@@ -21,6 +21,12 @@ import { defaultConfig, gameQuestions } from '../Config';
 */
 
 const initGame = (questions_obj) => {
+  const empty_category_hitmiss_obj = {};
+  questions_obj.forEach((category) => {
+    empty_category_hitmiss_obj[category.categoryName] = [];
+    console.log(empty_category_hitmiss_obj);
+  });
+
   return {
     gameOver: false,
     newCategory: true,
@@ -29,6 +35,7 @@ const initGame = (questions_obj) => {
     currentCategory: 0,
     amountOfQuestions: questions_obj[0].questions.length,
     currentQuestion: 0,
+    currentQuestionId: questions_obj[0].questions[0].id,
     categoryName: questions_obj[0].categoryName,
     question: questions_obj[0].questions[0].question,
     correct_answer: questions_obj[0].questions[0].correctAnswer,
@@ -38,6 +45,10 @@ const initGame = (questions_obj) => {
     answer: null,
     points: 0,
     questions_data: questions_obj,
+    hit_miss_counter: {
+      hits: { ...empty_category_hitmiss_obj },
+      misses: { ...empty_category_hitmiss_obj },
+    },
   };
 };
 
@@ -46,15 +57,32 @@ function reducer(state, action) {
     case 'category-confirm':
       return { ...state, newCategory: false };
     case 'answer':
-      const new_points =
-        action.user_answer == state.correct_answer
-          ? state.points + 3
-          : state.points;
+      console.log('answer here: ');
+      console.log(state.hit_miss_counter);
+      const newHitMissCounter = state.hit_miss_counter;
+      let new_points = state.points;
+      if (action.user_answer == state.correct_answer) {
+        new_points = state.points + 3;
+        newHitMissCounter.hits[state.categoryName] = [
+          ...newHitMissCounter.hits[state.categoryName],
+          state.currentQuestionId,
+        ];
+        console.log('answer here2: ');
+        console.log(newHitMissCounter);
+      } else {
+        newHitMissCounter.misses[state.categoryName] = [
+          ...newHitMissCounter.misses[state.categoryName],
+          state.currentQuestionId,
+        ];
+        console.log('answer here3: ');
+        console.log(newHitMissCounter);
+      }
       return {
         ...state,
         answered: true,
         answer: action.user_answer,
         points: new_points,
+        hit_miss_counter: newHitMissCounter,
       };
     case 'next':
       let newCurrentCategory = state.currentCategory;
@@ -84,6 +112,9 @@ function reducer(state, action) {
         categoryName: state.questions_data[newCurrentCategory].categoryName,
         currentCategory: newCurrentCategory,
         currentQuestion: newCurrentQuestion,
+        currentQuestionId:
+          state.questions_data[newCurrentCategory].questions[newCurrentQuestion]
+            .id,
         question:
           state.questions_data[newCurrentCategory].questions[newCurrentQuestion]
             .question,
@@ -126,11 +157,55 @@ export default function GameScreen({ route, navigation, setData }) {
           color={'indigo'}
           onPress={async () => {
             const data = JSON.parse(await AsyncStorage.getItem('data'));
+            const newQuestionStatsData = data.stats.questions;
+            console.log('AQUI: ');
+            console.log(newQuestionStatsData);
+            console.log(gameState.hit_miss_counter);
+            Object.keys(gameState.hit_miss_counter.hits).forEach(
+              (question_category) => {
+                gameState.hit_miss_counter.hits[question_category].forEach(
+                  (question_id) => {
+                    if (!newQuestionStatsData.hits[question_category]) {
+                      newQuestionStatsData.hits[question_category] = {};
+                    }
+
+                    newQuestionStatsData.hits[question_category][question_id] =
+                      data.stats.questions.hits[question_category][question_id]
+                        ? data.stats.questions.hits[question_category][
+                            question_id
+                          ] + 1
+                        : 1;
+                  }
+                );
+              }
+            );
+            Object.keys(gameState.hit_miss_counter.misses).forEach(
+              (question_category) => {
+                gameState.hit_miss_counter.misses[question_category].forEach(
+                  (question_id) => {
+                    if (!newQuestionStatsData.misses[question_category]) {
+                      newQuestionStatsData.misses[question_category] = {};
+                    }
+                    newQuestionStatsData.misses[question_category][
+                      question_id
+                    ] = data.stats.questions.misses[question_category][
+                      question_id
+                    ]
+                      ? data.stats.questions.misses[question_category][
+                          question_id
+                        ] + 1
+                      : 1;
+                  }
+                );
+              }
+            );
+
             await AsyncStorage.setItem(
               'data',
               JSON.stringify({
                 ...data,
                 points: data.points + gameState.points,
+                stats: { ...data.stats, questions: newQuestionStatsData },
               })
             );
             navigation.navigate('GameTabs', {
@@ -242,7 +317,10 @@ export default function GameScreen({ route, navigation, setData }) {
           }
           onPress={() => {
             if (!gameState.answered) {
-              dispatchGameState({ type: 'answer', user_answer: item });
+              dispatchGameState({
+                type: 'answer',
+                user_answer: item,
+              });
             }
           }}
         />
