@@ -27,7 +27,7 @@ export default function App() {
         new Promise((resolve) => {
           setTimeout(() => {
             resolve('promise done');
-          }, 3000);
+          }, 1000);
         }),
       ]).then(() => {
         setLoading(false);
@@ -46,7 +46,7 @@ export default function App() {
           unmountOnBlur: true,
         }}
       >
-        <GameTabs.Screen name='Home'>
+        <GameTabs.Screen name="Home">
           {(props) => (
             <HomeScreen
               loadingState={loading}
@@ -56,7 +56,7 @@ export default function App() {
             />
           )}
         </GameTabs.Screen>
-        <GameTabs.Screen name='Game'>
+        <GameTabs.Screen name="Game">
           {(props) => <GameScreen {...props} />}
         </GameTabs.Screen>
       </GameTabs.Navigator>
@@ -69,9 +69,9 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
             <RootStack.Navigator screenOptions={{ headerShown: false }}>
-              <RootStack.Screen name='GameTabs' component={Game} />
+              <RootStack.Screen name="GameTabs" component={Game} />
             </RootStack.Navigator>
-            <StatusBar style='auto' />
+            <StatusBar style="auto" />
           </NavigationContainer>
         </GestureHandlerRootView>
       </SafeAreaView>
@@ -95,7 +95,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style='auto' />
+      <StatusBar style="auto" />
     </View>
   );
 }
