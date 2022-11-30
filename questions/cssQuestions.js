@@ -50,10 +50,10 @@ const cssQuestions = [
   {
     id: 5,
     question: `div .grey-box{
-        display: block;
-        background-color: grey;
-        width: 50%;
-    }`,
+    display: block;
+    background-color: grey;
+    width: 50%;
+}`,
     possibilities: [
       'Neste caso, div e .grey-box são ambos propriedades',
       'Neste caso, display e width são ambos seletores',
@@ -65,10 +65,10 @@ const cssQuestions = [
   {
     id: 6,
     question: `div .grey-box{
-        display: block;
-        background-color: grey;
-        width: 50%;
-    }`,
+    display: block;
+    background-color: grey;
+    width: 50%;
+}`,
     possibilities: [
       'Neste caso, div e .grey-box são ambos propriedades',
       'Neste caso, block e grey são ambos propriedades',
@@ -149,10 +149,10 @@ const cssQuestions = [
   {
     id: 13,
     question: `div.greyBox h1{
-        color: white;
-    }
+    color: white;
+}
     
-    Neste pedaço de código:`,
+Neste pedaço de código:`,
     possibilities: [
       'O seletor "div.greyBox h1" seleciona todos os h1 filhos de um <div> de classe "greyBox"',
       'justify-content',

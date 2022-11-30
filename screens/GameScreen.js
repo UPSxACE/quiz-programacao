@@ -5,6 +5,7 @@ import { useReducer } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { defaultConfig, gameQuestions } from '../Config';
 
 /*
   example of object "questions":
@@ -62,8 +63,6 @@ function reducer(state, action) {
       let newCurrentQuestion =
         (state.currentQuestion + 1) % state.amountOfQuestions;
 
-      console.log('AAAAAAAAAAA');
-
       if (newCurrentQuestion === 0) {
         newCurrentCategory = state.currentCategory + 1;
       }
@@ -100,58 +99,13 @@ function reducer(state, action) {
 }
 
 export default function GameScreen({ route, navigation, setData }) {
-  const questions_data = [
-    {
-      categoryName: 'Inglês',
-      questions: [
-        {
-          question: 'Example of question 1?',
-          possibilities: ['a', 'b', 'c', 'd'],
-          correctAnswer: 'c',
-        },
-        {
-          question: 'Example of question 2?',
-          possibilities: ['a', 'b', 'c', 'd'],
-          correctAnswer: 'c',
-        },
-        {
-          question: 'Example of question 3?',
-          possibilities: ['a', 'b', 'c', 'd'],
-          correctAnswer: 'c',
-        },
-      ],
-    },
-    {
-      categoryName: 'HTML',
-      questions: [
-        {
-          question: 'Example of question 4?',
-          possibilities: ['a', 'b', 'c', 'd'],
-          correctAnswer: 'c',
-        },
-        {
-          question: 'Example of question 5?',
-          possibilities: ['a', 'b', 'c', 'd'],
-          correctAnswer: 'c',
-        },
-        {
-          question: 'Example of question 6?',
-          possibilities: ['a', 'b', 'c', 'd'],
-          correctAnswer: 'c',
-        },
-      ],
-    },
-  ];
-
   const data = route.params.data;
+  const questions_data = pickQuestions(data);
   const [gameState, dispatchGameState] = useReducer(
     reducer,
     questions_data,
     initGame
   );
-
-  console.log('gamestate: ');
-  console.log(gameState);
 
   if (gameState.gameOver) {
     return (
@@ -203,6 +157,7 @@ export default function GameScreen({ route, navigation, setData }) {
         </Text>
         <Button
           title={'COMEÇAR'}
+          color={'indigo'}
           onPress={() => {
             dispatchGameState({ type: 'category-confirm' });
           }}
@@ -211,7 +166,6 @@ export default function GameScreen({ route, navigation, setData }) {
     );
   }
 
-  console.log(gameState);
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -228,9 +182,19 @@ export default function GameScreen({ route, navigation, setData }) {
           justifyContent: 'center',
           alignItems: 'center',
           paddingBottom: 16,
+          paddingHorizontal: 24,
         }}
       >
-        <Text style={{ fontSize: 28, paddingBottom: 16 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            marginBottom: 16,
+            //padding: 8,
+            textAlign: 'justify',
+            width: '100%',
+            //borderWidth: 1,
+          }}
+        >
           {gameState.question}
         </Text>
         <FlatList
@@ -243,8 +207,8 @@ export default function GameScreen({ route, navigation, setData }) {
       <View style={{ paddingHorizontal: 24, paddingBottom: 16, height: 56 }}>
         {gameState.answered && (
           <Button
-            title='PRÓXIMO'
-            color='indigo'
+            title="PRÓXIMO"
+            color="indigo"
             onPress={() => {
               dispatchGameState({ type: 'next' });
             }}
@@ -263,11 +227,8 @@ export default function GameScreen({ route, navigation, setData }) {
         }}
       >
         <Button
-          containerStyle={{
-            paddingHorizontal: 24,
-          }}
-          buttonStyle={{ width: '100%', height: 48 }}
-          titleStyle={{ fontSize: 20 }}
+          buttonStyle={{ width: '100%' }}
+          titleStyle={{ fontSize: 18 }}
           title={item}
           //color={'cornflowerblue'}
           color={
@@ -290,8 +251,9 @@ export default function GameScreen({ route, navigation, setData }) {
   }
 }
 
-//Fisher-Yates Shuffle
-function shuffle(array) {
+// Fisher-Yates Shuffle
+// MODIFIED TO ACCEPT NEW ARGUMENT: max_length
+function shuffle(array, max_length) {
   let currentIndex = array.length,
     randomIndex;
 
@@ -308,5 +270,41 @@ function shuffle(array) {
     ];
   }
 
+  if (max_length) {
+    return array.slice(0, max_length);
+  }
+
   return array;
+}
+
+function pickQuestions(data) {
+  const final_array = [];
+  const categories = Object.keys(defaultConfig);
+
+  categories.forEach((category) => {
+    if (data[category].on) {
+      final_array.push({
+        categoryName: category,
+        questions: shuffle(
+          gameQuestions[category],
+          (data[category].amountQuestions + 1) * 3
+        ),
+      });
+    }
+  });
+
+  return final_array;
+
+  return [
+    {
+      categoryName: 'Inglês',
+      questions: [
+        {
+          question: 'example?',
+          possibilities: ['a', 'b', 'c', 'd'],
+          correctAnswer: 'c',
+        },
+      ],
+    },
+  ];
 }

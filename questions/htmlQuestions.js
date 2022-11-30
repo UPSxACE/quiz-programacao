@@ -62,8 +62,8 @@ const htmlQuestions = [
   {
     id: 7,
     question: `<div>
-        <h1>Futebol Ao Vivo</h1>
-    </div>
+    <h1>Futebol Ao Vivo</h1>
+</div>
     `,
     possibilities: [
       'Neste pedaço de código, o elemento h1 é o "pai", e o "div" é o "filho"',

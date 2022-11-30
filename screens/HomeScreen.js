@@ -19,6 +19,8 @@ export default function HomeScreen({
   const [inputValue, setInputValue] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [data, setData] = useState({});
+  const [dataOnOffValidator, setdataOnOffValidator] = useState(false);
+  let onCounter = [];
 
   useEffect(() => {
     async function loadData() {
@@ -125,7 +127,14 @@ export default function HomeScreen({
     <View style={{ flex: 1 }}>
       <FlatList
         ListHeaderComponent={
-          <PageContent nameState={nameState} data={data} setData={setData} />
+          <PageContent
+            nameState={nameState}
+            data={data}
+            setData={setData}
+            dataOnOffValidator={dataOnOffValidator}
+            setdataOnOffValidator={setdataOnOffValidator}
+            onCounter={onCounter}
+          />
         }
         contentContainerStyle={{ flex: 1 }}
         ListHeaderComponentStyle={{ flex: 1 }}
@@ -134,7 +143,14 @@ export default function HomeScreen({
   );
 }
 
-function PageContent({ nameState, data, setData }) {
+function PageContent({
+  nameState,
+  data,
+  setData,
+  dataOnOffValidator,
+  setdataOnOffValidator,
+  onCounter,
+}) {
   const navigation = useNavigation();
 
   function Item({ item }) {
@@ -142,6 +158,15 @@ function PageContent({ nameState, data, setData }) {
     const [amountQuestions, setAmountQuestions] = useState(
       data[item].amountQuestions
     );
+
+    useEffect(() => {
+      if (data[item].on) {
+        onCounter.push(item);
+        if (dataOnOffValidator === false) {
+          setdataOnOffValidator(true);
+        }
+      }
+    }, []);
 
     return (
       <View
@@ -187,6 +212,21 @@ function PageContent({ nameState, data, setData }) {
           title={on ? 'L' : 'D'}
           color={on ? 'green' : 'red'}
           onPress={() => {
+            // check the need to disable the start button
+            if (!on) {
+              onCounter.push(item);
+            } else {
+              onCounter.pop(item);
+            }
+
+            if (onCounter.length > 0 && dataOnOffValidator === false) {
+              setdataOnOffValidator(true);
+            }
+            if (onCounter.length <= 0 && dataOnOffValidator === true) {
+              setdataOnOffValidator(false);
+            }
+
+            // toggle on/off
             const newData = data;
             newData[item].on = !newData[item].on;
             setOn(!on);
@@ -221,21 +261,26 @@ function PageContent({ nameState, data, setData }) {
           containerStyle={{ paddingBottom: 8 }}
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title='START'
-          color='indigo'
+          title="START"
+          color={'indigo'}
+          disabled={!dataOnOffValidator}
+          disabledStyle={{ backgroundColor: 'grey' }}
+          disabledTitleStyle={{ color: 'white' }}
           onPress={() => {
-            AsyncStorage.setItem('data', JSON.stringify(data));
-            navigation.navigate('GameTabs', {
-              screen: 'Game',
-              params: { data },
-            });
+            if (dataOnOffValidator) {
+              AsyncStorage.setItem('data', JSON.stringify(data));
+              navigation.navigate('GameTabs', {
+                screen: 'Game',
+                params: { data },
+              });
+            }
           }}
         />
         <Button
           buttonStyle={{ height: 48 }}
           titleStyle={{ fontSize: 20 }}
-          title='STATS'
-          color='blueviolet'
+          title="STATS"
+          color="blueviolet"
         />
       </View>
     </View>
