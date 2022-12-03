@@ -22,11 +22,13 @@ export default function StatScreen({ navigation, route }) {
           </Text>
           <Text style={{ fontSize: 20, marginLeft: 'auto' }}>
             {String(
-              Math.floor(
-                (Object.keys(stats.questions.hits).length /
-                  gameQuestions[item].length) *
-                  100
-              )
+              stats.questions.hits[item]
+                ? Math.floor(
+                    (Object.keys(stats.questions.hits[item]).length /
+                      gameQuestions[item].length) *
+                      100
+                  )
+                : 0
             )}
             %
           </Text>
